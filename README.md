@@ -36,6 +36,43 @@ myos/
 - **Makefile**: The makefile that automates the build process.
 - **README.md**: Provides information about the project, build instructions, and usage.
 
+### Installation Tools
+
+#### For Linux Users (e.g., Ubuntu)
+
+1. Update the package list and install necessary tools:
+
+    ```sh
+    sudo apt update
+    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools
+    ```
+
+2. Install cross-compilation toolchain (optional):
+
+    ```sh
+    sudo apt install gcc-multilib g++-multilib
+    ```
+
+#### For Windows Users
+
+On Windows, you can use MSYS2 to set up a Linux-like development environment.
+
+1. Download and install MSYS2:
+    - Visit the [MSYS2 website](https://www.msys2.org/) to download and install MSYS2.
+2. Update MSYS2:
+    Open the MSYS2 MSYS terminal and run the following command to update the package manager:
+
+    ```sh
+    pacman -Syu
+    ```
+
+3. Install necessary tools:
+    Open the MSYS2 MSYS terminal and run the following command to install GCC, NASM, and QEMU:
+
+    ```sh
+    pacman -S base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils mingw-w64-x86_64-nasm mingw-w64-x86_64-qemu
+    ```
+
 ## Learning Objectives
 
 ### Prerequisites

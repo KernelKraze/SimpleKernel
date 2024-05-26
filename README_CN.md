@@ -36,6 +36,43 @@ myos/
 - **Makefile**: 自动化构建过程的makefile。
 - **README.md**: 提供有关项目、构建说明和使用的信息。
 
+### 安装工具
+
+#### 对于Linux用户（例如Ubuntu）
+
+1. 更新包列表并安装必要的工具：
+
+    ```sh
+    sudo apt update
+    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools
+    ```
+
+2. 安装交叉编译工具链（可选）：
+
+    ```sh
+    sudo apt install gcc-multilib g++-multilib
+    ```
+
+#### 对于Windows用户
+
+在Windows上，可以通过安装MSYS2来获得类似Linux的开发环境。
+
+1. 下载并安装MSYS2：
+    - 前往 [MSYS2官网](https://www.msys2.org/) 下载并安装MSYS2。
+2. 更新MSYS2：
+    打开MSYS2 MSYS终端，运行以下命令以更新包管理器：
+
+    ```sh
+    pacman -Syu
+    ```
+
+3. 安装必要的工具：
+    打开MSYS2 MSYS终端，运行以下命令安装GCC、NASM和QEMU：
+
+    ```sh
+    pacman -S base-devel mingw-w64-x86_64-gcc mingw-w64-x86_64-binutils mingw-w64-x86_64-nasm mingw-w64-x86_64-qemu
+    ```
+
 ## 学习目标
 
 ### 前提条件
