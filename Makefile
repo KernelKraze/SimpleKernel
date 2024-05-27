@@ -21,6 +21,7 @@ KERNELDIR = $(SRCDIR)/kernel
 INCDIR = include
 ISODIR = iso
 EFIDIR = efi
+ISOEFIDIR=iso/efi
 
 # 定义对象文件列表
 # Define object file lists
@@ -103,4 +104,4 @@ $(KERNELDIR)/arch/x86/startup.o: $(KERNELDIR)/arch/x86/startup.S
 .PHONY: clean
 
 clean:
-	rm -rf $(BOOTDIR_BIOS)/*.o $(BOOTDIR_EFI)/*.o $(KERNELDIR)/**/*.o $(KERNELDIR)/*.o $(KERNELDIR)/arch/x86/startup.o *.bin *.iso kernel.bin $(ISODIR)/boot/kernel.bin $(EFIDIR)/boot/bootx64.efi
+	rm -rf $(BOOTDIR_BIOS)/*.o $(BOOTDIR_EFI)/*.o $(KERNELDIR)/**/*.o $(KERNELDIR)/*.o $(KERNELDIR)/arch/x86/startup.o *.bin *.iso kernel.bin $(ISODIR)/boot/kernel.bin $(EFIDIR)/boot/bootx64.efi $(ISOEFIDIR)/boot/bootx64.efi
