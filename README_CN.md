@@ -153,105 +153,29 @@ qemu-system-i386 -cdrom os-image.iso
 
 ## 理解源代码
 
-### 汇编引导程序 (src/boot/boot.s)
+### 汇编引导程序 (src/boot/bios/boot.s)
 
 这个文件包含用汇编语言编写的初始引导程序代码。它设置了多重引导头并将控制权转移到内核的主函数。
 
-```assembly
-section .multiboot_header
-    align 4
-    dd 0x1BADB002                ; Magic number / 魔数
-    dd 0x00000003                ; Flags / 标志
-    dd -(0x1BADB002 + 0x00000003); Checksum / 校验和
-
-section .text
-    global _start
-    extern kernel_main
-
-_start:
-    call kernel_main
-    hlt
-```
+[file_link](./src/boot/bios/boot.s)
 
 ### 内核主函数 (src/kernel/kernel.c)
 
 内核的主函数初始化系统并在屏幕上打印“Hello, World!”。
 
-```c
-void kernel_main(void)
-{
-    const char *str = "Hello, World!";
-    char *vidptr = (char*)0xb8000;  /* Start of video memory / 视频内存起始地址 */
-    unsigned int i = 0;
-    unsigned int j = 0;
+[file_link](./src/kernel/kernel.c)
 
-    /* 清屏 */
-    while (j < 80 * 25 * 2) {
-        vidptr[j] = ' ';       /* 设置字符为空格 */
-        vidptr[j + 1] = 0x07;  /* 设置属性字节 - 白色文本，黑色背景 */
-        j += 2;
-    }
-
-    j = 0;
-    /* 打印字符串 */
-    while (str[i] != '\0') {
-        vidptr[j] = str[i];    /* 设置字符 */
-        vidptr[j + 1] = 0x07;  /* 设置属性字节 */
-        ++i;
-        j += 2;
-    }
-
-    while (1); /* 无限循环，防止内核退出 */
-}
-```
-
-### 内核头文件 (include/kernel.h)
+### 内核头文件 (./include/kernel/kernel.h)
 
 这个头文件包含 `kernel_main` 函数的声明。
 
-```c
-#ifndef KERNEL_H
-#define KERNEL_H
-
-void kernel_main(void);
-
-#endif /* KERNEL_H */
-```
+[file_link](./include/kernel/kernel.h)
 
 ### 链接脚本 (linker.ld)
 
 链接脚本定义了内核的内存布局。
 
-```ld
-ENTRY(_start)
-
-SECTIONS
-{
-    . = 0x00100000;
-
-    .text :
-    {
-        *(.multiboot_header)
-        *(.text)
-    }
-
-    .rodata :
-    {
-        *(.rodata)
-    }
-
-    .data :
-    {
-        *(.data)
-    }
-
-    .bss :
-    {
-        *(.bss)
-        *(COMMON)
-    }
-}
-```
+[file_link](./linker.ld)
 
 ### GRUB配置文件 (boot/grub/grub.cfg)
 
@@ -271,31 +195,7 @@ menuentry "My Operating System" {
 
 Makefile自动化内核的构建过程。
 
-```makefile
-CFLAGS=-m32 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Iinclude
-
-all: os-image
-
-os-image: iso/boot/grub/grub.cfg kernel.bin
-	mkdir -p iso/boot/grub
-	cp boot/grub/grub.cfg iso/boot/grub/grub.cfg
-	cp kernel.bin iso/boot/kernel.bin
-	grub-mkrescue -o os-image.iso iso
-
-kernel.bin: src/boot/boot.o src/kernel/kernel.o
-	ld -m elf_i386 -T linker.ld -o kernel.bin src/boot/boot.o src/kernel/kernel.o
-
-src/boot/boot.o: src/boot/boot.s
-	nasm -f elf32 src/boot/boot.s -o src/boot/boot.o
-
-src/kernel/kernel.o: src/kernel/kernel.c include/kernel.h
-	gcc $(CFLAGS) -c src/kernel/kernel.c -o src/kernel/kernel.o
-
-clean:
-	rm -rf src/boot/*.o src/kernel/*.o *.bin *.iso kernel.bin iso/boot/kernel.bin
-
-.PHONY: clean
-```
+[file_link](./Makefile)
 
 ## 初学者的挑战
 
@@ -314,4 +214,6 @@ clean:
 
 通过遵循这些步骤并利用提供的资源，初学者可以逐步建立起理解和开发自己操作系统内核的技能和知识。
 
-# 内容待更新,现在仅仅只是初始阶段..
+> 内容待更新,现在仅仅只是初始阶段..
+
+> 为了方便编写说明,我删除了docs文件夹,详细的说明将直接写入到源代码注释内.

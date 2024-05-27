@@ -155,105 +155,29 @@ qemu-system-i386 -cdrom os-image.iso
 
 ## Understanding the Source Code
 
-### Assembly Bootloader (src/boot/boot.s)
+### Assembly Bootloader (src/boot/bios/boot.s)
 
 This file contains the initial bootloader code written in assembly. It sets up the Multiboot header and transfers control to the kernel's main function.
 
-```assembly
-section .multiboot_header
-    align 4
-    dd 0x1BADB002                ; Magic number
-    dd 0x00000003                ; Flags
-    dd -(0x1BADB002 + 0x00000003); Checksum
-
-section .text
-    global _start
-    extern kernel_main
-
-_start:
-    call kernel_main
-    hlt
-```
+[file_link](./src/boot/bios/boot.s)
 
 ### Kernel Main Function (src/kernel/kernel.c)
 
 The kernel's main function initializes the system and prints "Hello, World!" to the screen.
 
-```c
-void kernel_main(void)
-{
-    const char *str = "Hello, World!";
-    char *vidptr = (char*)0xb8000;  /* Start of video memory */
-    unsigned int i = 0;
-    unsigned int j = 0;
+[file_link](./src/kernel/kernel.c)
 
-    /* Clear the screen */
-    while (j < 80 * 25 * 2) {
-        vidptr[j] = ' ';       /* Set character to space */
-        vidptr[j + 1] = 0x07;  /* Set attribute byte - white text on black background */
-        j += 2;
-    }
-
-    j = 0;
-    /* Print the string */
-    while (str[i] != '\0') {
-        vidptr[j] = str[i];    /* Set character */
-        vidptr[j + 1] = 0x07;  /* Set attribute byte */
-        ++i;
-        j += 2;
-    }
-
-    while (1); /* Infinite loop to prevent kernel from exiting */
-}
-```
-
-### Kernel Header File (include/kernel.h)
+### Kernel Header File (./include/kernel/kernel.h)
 
 This header file contains the declaration for the `kernel_main` function.
 
-```c
-#ifndef KERNEL_H
-#define KERNEL_H
-
-void kernel_main(void);
-
-#endif /* KERNEL_H */
-```
+[file_link](./include/kernel/kernel.h)
 
 ### Linker Script (linker.ld)
 
 The linker script defines the memory layout for the kernel.
 
-```ld
-ENTRY(_start)
-
-SECTIONS
-{
-    . = 0x00100000;
-
-    .text :
-    {
-        *(.multiboot_header)
-        *(.text)
-    }
-
-    .rodata :
-    {
-        *(.rodata)
-    }
-
-    .data :
-    {
-        *(.data)
-    }
-
-    .bss :
-    {
-        *(.bss)
-        *(COMMON)
-    }
-}
-```
+[file_link](./linker.ld)
 
 ### GRUB Configuration File (boot/grub/grub.cfg)
 
@@ -273,31 +197,7 @@ menuentry "My Operating System" {
 
 The makefile automates the build process for the kernel.
 
-```makefile
-CFLAGS=-m32 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Iinclude
-
-all: os-image
-
-os-image: iso/boot/grub/grub.cfg kernel.bin
-	mkdir -p iso/boot/grub
-	cp boot/grub/grub.cfg iso/boot/grub/grub.cfg
-	cp kernel.bin iso/boot/kernel.bin
-	grub-mkrescue -o os-image.iso iso
-
-kernel.bin: src/boot/boot.o src/kernel/kernel.o
-	ld -m elf_i386 -T linker.ld -o kernel.bin src/boot/boot.o src/kernel/kernel.o
-
-src/boot/boot.o: src/boot/boot.s
-	nasm -f elf32 src/boot/boot.s -o src/boot/boot.o
-
-src/kernel/kernel.o: src/kernel/kernel.c include/kernel.h
-	gcc $(CFLAGS) -c src/kernel/kernel.c -o src/kernel/kernel.o
-
-clean:
-	rm -rf src/boot/*.o src/kernel/*.o *.bin *.iso kernel.bin iso/boot/kernel.bin
-
-.PHONY: clean
-```
+[file_link](./Makefile)
 
 ## Challenges for Beginners
 
@@ -321,7 +221,6 @@ clean:
 
 By following these steps and utilizing the provided resources, beginners can gradually build up the skills and knowledge needed to understand and develop their own operating system kernel.
 
-# The content needs to be updated, it is only the initial stage...
+> The content needs to be updated, it is only the initial stage...
 
-# The newly added content and modified content will be announced, and the modifications will be merged and optimized later.
-
+> In order to facilitate writing instructions, I deleted the docs folder, and detailed instructions will be written directly into the source code comments.
