@@ -7,23 +7,55 @@ This project is a simple operating system kernel designed to help beginners lear
 ## Directory Structure
 
 ```
-myos/
-├── boot/
-│   └── grub/
+.
+├── boot
+│   └── grub
 │       └── grub.cfg
-├── iso/
-│   ├── boot/
-│   │   └── grub/
-├── src/
-│   ├── boot/
-│   │   └── boot.s
-│   └── kernel/
-│       └── kernel.c
-├── include/
-│   └── kernel.h
+├── docs
+│   ├── Kernel Development Notes CN.md
+│   └── Kernel Development Notes.md
+├── efi
+│   └── boot
+├── include
+│   ├── kernel
+│   │   ├── drivers.h
+│   │   ├── fs.h
+│   │   ├── init.h
+│   │   ├── kernel.h
+│   │   └── mm.h
+│   └── string.h
+├── iso
+│   ├── boot
+│   │   └── grub
+│   │       └── grub.cfg
+│   └── efi
+│       └── boot
+│           └── bootx64.efi
 ├── linker.ld
 ├── Makefile
-└── README.md
+├── README_CN.md
+├── README.md
+└── src
+    ├── boot
+    │   ├── bios
+    │   │   └── boot.s
+    │   └── efi
+    │       └── boot.c
+    └── kernel
+        ├── arch
+        │   └── x86
+        │       └── startup.S
+        ├── drivers
+        │   └── driver.c
+        ├── fs
+        │   └── fs.c
+        ├── init
+        │   └── init.c
+        ├── kernel.c
+        ├── lib
+        │   └── string.c
+        └── mm
+            └── mm.c
 ```
 
 ### Explanation of Directory Structure
@@ -46,7 +78,7 @@ myos/
 
     ```sh
     sudo apt update
-    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools
+    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools gnu-efi
     ```
 
 2. Install cross-compilation toolchain (optional):
@@ -290,3 +322,6 @@ clean:
 By following these steps and utilizing the provided resources, beginners can gradually build up the skills and knowledge needed to understand and develop their own operating system kernel.
 
 # The content needs to be updated, it is only the initial stage...
+
+# The newly added content and modified content will be announced, and the modifications will be merged and optimized later.
+

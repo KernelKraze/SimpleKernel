@@ -5,23 +5,55 @@
 ## 目录结构
 
 ```
-myos/
-├── boot/
-│   └── grub/
+.
+├── boot
+│   └── grub
 │       └── grub.cfg
-├── iso/
-│   ├── boot/
-│   │   └── grub/
-├── src/
-│   ├── boot/
-│   │   └── boot.s
-│   └── kernel/
-│       └── kernel.c
-├── include/
-│   └── kernel.h
+├── docs
+│   ├── Kernel Development Notes CN.md
+│   └── Kernel Development Notes.md
+├── efi
+│   └── boot
+├── include
+│   ├── kernel
+│   │   ├── drivers.h
+│   │   ├── fs.h
+│   │   ├── init.h
+│   │   ├── kernel.h
+│   │   └── mm.h
+│   └── string.h
+├── iso
+│   ├── boot
+│   │   └── grub
+│   │       └── grub.cfg
+│   └── efi
+│       └── boot
+│           └── bootx64.efi
 ├── linker.ld
 ├── Makefile
-└── README.md
+├── README_CN.md
+├── README.md
+└── src
+    ├── boot
+    │   ├── bios
+    │   │   └── boot.s
+    │   └── efi
+    │       └── boot.c
+    └── kernel
+        ├── arch
+        │   └── x86
+        │       └── startup.S
+        ├── drivers
+        │   └── driver.c
+        ├── fs
+        │   └── fs.c
+        ├── init
+        │   └── init.c
+        ├── kernel.c
+        ├── lib
+        │   └── string.c
+        └── mm
+            └── mm.c
 ```
 
 ### 目录结构说明
@@ -44,7 +76,7 @@ myos/
 
     ```sh
     sudo apt update
-    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools
+    sudo apt install build-essential gcc g++ binutils nasm qemu-system-x86 grub-pc-bin xorriso mtools gnu-efi
     ```
 
 2. 安装交叉编译工具链（可选）：
