@@ -140,9 +140,18 @@ Before diving into kernel development, it's important to have a solid understand
 
 ### Building the Project
 
-To build the project, run:
+To build the project in release mode (without debug information), run:
 ```sh
 make all
+```
+Or simply:
+```sh
+make
+```
+
+To build the project in debug mode (with debug information), run:
+```sh
+make DEBUG=yes
 ```
 
 To clean the build files, run:
