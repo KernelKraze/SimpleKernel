@@ -1,6 +1,7 @@
 [你是中国人吗?](./README_CN.md)
 
 # My Operating System
+![Demonstration Video](./videos/2024-5-29.gif)
 
 This project is a simple operating system kernel designed to help beginners learn about kernel development. It includes basic bootstrapping, a minimal Multiboot header, and a simple main function that outputs a string to the screen.
 
