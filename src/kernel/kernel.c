@@ -12,48 +12,44 @@
  */
 
 #include "kernel/mm.h"  // 包含内存管理头文件
+#include "string.h"     // 包含字符串处理头文件
 
 #define VIDEO_MEMORY 0xb8000
 #define SCREEN_WIDTH 80
 #define SCREEN_HEIGHT 25
 #define WHITE_ON_BLACK 0x07
 
+static unsigned int cursor_pos = 0;  // 声明 cursor_pos 变量并初始化为 0
+
 void kernel_main(void)
 {
     // 初始化内存管理系统，假设总内存大小为4MB
     mm_init(4 * 1024 * 1024);
 
-    const char *str = "Hello, World!";
-    char *vidptr = (char *)VIDEO_MEMORY;  /* Start of video memory / 视频内存起始地址 */
-    unsigned int i = 0;
-    unsigned int screen_size = SCREEN_WIDTH * SCREEN_HEIGHT * 2;
-
-    /* Clear the screen */
-    /* 清屏 */
-    for (i = 0; i < screen_size; i += 2) {
-        vidptr[i] = ' ';       /* Set character to space / 设置字符为空格 */
-        vidptr[i + 1] = WHITE_ON_BLACK;  /* Set attribute byte - white text on black background / 设置属性字节 - 白色文本，黑色背景 */
+    // 清屏
+    char *vidptr = (char *)VIDEO_MEMORY;
+    for (unsigned int i = 0; i < SCREEN_WIDTH * SCREEN_HEIGHT * 2; i += 2) {
+        vidptr[i] = ' ';
+        vidptr[i + 1] = WHITE_ON_BLACK;
     }
+    cursor_pos = 0;
+    printf("Hello, World!\n");
 
-    /* Print the string */
-    /* 打印字符串 */
-    i = 0;
-    unsigned int j = 0;
-    while (str[i] != '\0') {
-        vidptr[j] = str[i];    /* Set character / 设置字符 */
-        vidptr[j + 1] = WHITE_ON_BLACK;  /* Set attribute byte / 设置属性字节 */
-        ++i;
-        j += 2;
-    }
+    // 打印内核初始化信息
+    printf("[Kernel INFO] %s\n", "Kernel started\n");
+    printf("[Kernel INFO] %s\n", "Memory Management Initialized\n");
 
     // 测试内存分配和释放
     void* test_alloc = kmalloc(256); // 分配256字节内存
     if (test_alloc) {
+        printf("[Kernel INFO] %s\n", "Memory Allocated: 256 bytes\n");
         kfree(test_alloc); // 释放分配的内存
+        printf("[Kernel INFO] %s\n", "Memory Freed: 256 bytes\n");
+    } else {
+        printf("[Kernel ERROR] %s\n", "Memory Allocation Failed\n");
     }
 
-    /* Infinite loop to prevent kernel from exiting */
-    /* 无限循环，防止内核退出 */
+    // 无限循环，防止内核退出
     while (1)
         ;
 }
