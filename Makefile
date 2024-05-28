@@ -2,10 +2,19 @@
 # Makefile for building the My Operating System kernel
 # Author: KernelKraze
 
+# 是否包含调试信息，调试信息默认关闭（默认不包含DEBUG信息）
+# Include debug information? Disabled by default.
+DEBUG ?= no
+
 # 编译器选项
 # Compiler options
-CFLAGS=-m32 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Iinclude
-EFI_CFLAGS=-fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Iinclude -I/usr/include/efi -I/usr/include/efi/x86_64
+ifeq ($(DEBUG),yes)
+CFLAGS=-m32 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Iinclude -g
+EFI_CFLAGS=-fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Iinclude -I/usr/include/efi -I/usr/include/efi/x86_64 -g
+else
+CFLAGS=-m32 -nostdlib -nostartfiles -nodefaultlibs -fno-builtin -fno-stack-protector -Iinclude -s -g0
+EFI_CFLAGS=-fno-stack-protector -fpic -fshort-wchar -mno-red-zone -Iinclude -I/usr/include/efi -I/usr/include/efi/x86_64 -s -g0
+endif
 
 # 链接器选项
 # Linker options
@@ -31,7 +40,14 @@ KERNEL_OBJS = $(KERNELDIR)/kernel.o $(KERNELDIR)/init/init.o $(KERNELDIR)/mm/mm.
 
 # 目标文件：'all' 是默认目标，这里定义了最终生成的ISO映像
 # Target file: 'all' is the default target, which builds the final ISO image
-all: os-image
+all: echo_mode os-image
+
+echo_mode:
+	@if [ "$(DEBUG)" = "yes" ]; then \
+		echo "编译模式：调试模式启用 (Debug mode enabled)"; \
+	else \
+		echo "编译模式：发布模式，不包含调试信息 (Release mode, debug information not included)"; \
+	fi
 
 # 生成ISO映像
 # Build ISO image
@@ -42,11 +58,13 @@ os-image: $(ISODIR)/boot/grub/grub.cfg kernel.bin $(EFIDIR)/boot/bootx64.efi
 	cp kernel.bin $(ISODIR)/boot/kernel.bin
 	cp $(EFIDIR)/boot/bootx64.efi $(ISODIR)/efi/boot/bootx64.efi
 	grub-mkrescue -o os-image.iso $(ISODIR)
+	@echo "ISO 映像已生成: os-image.iso (ISO image created: os-image.iso)"
 
 # 生成内核二进制文件
 # Build kernel binary
 kernel.bin: $(BOOT_OBJS_BIOS) $(KERNEL_OBJS)
 	ld $(LDFLAGS) -o kernel.bin $(BOOT_OBJS_BIOS) $(KERNEL_OBJS)
+	@echo "内核二进制文件已生成: kernel.bin (Kernel binary created: kernel.bin)"
 
 # 编译BIOS引导代码
 # Compile BIOS boot code
