@@ -61,14 +61,18 @@ This project is a simple operating system kernel designed to help beginners lear
 ### Explanation of Directory Structure
 
 - **boot/**: Contains the GRUB configuration files necessary for booting the OS.
-- **iso/**: Mirrors the boot directory structure needed for ISO creation. This is where the bootable ISO will be constructed.
-- **src/**: Source code files are divided into:
-  - **boot/**: Contains low-level assembly boot files.
-  - **kernel/**: Contains kernel-related C source files.
-- **include/**: Header files for the project. It separates the interface (headers) from the implementation (source files).
+- **docs/**: Contains documentation on kernel development, available in both Chinese and English versions.
+- **efi/**: Contains boot files for EFI startup.
+- **include/**: Header files for the project, including:
+  - **kernel/**: Contains headers for drivers, file system, initialization, core kernel, and memory management.
+  - **string.h**: Header file for general string operations.
+- **iso/**: Mirrors the boot directory structure required for ISO creation. This is where the bootable ISO is constructed.
 - **linker.ld**: The linker script used for linking the kernel.
 - **Makefile**: The makefile that automates the build process.
-- **README.md**: Provides information about the project, build instructions, and usage.
+- **README.md** and **README_CN.md**: Provide information about the project, build instructions, and usage in English and Chinese, respectively.
+- **src/**: Source code files divided into:
+  - **boot/**: Contains low-level assembly boot files for EFI and BIOS.
+  - **kernel/**: Contains kernel-related C source files and architecture-specific startup code.
 
 ### Installation Tools
 
