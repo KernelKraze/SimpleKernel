@@ -36,7 +36,7 @@ ISOEFIDIR=iso/efi
 # Define object file lists
 BOOT_OBJS_BIOS = $(BOOTDIR_BIOS)/boot.o
 BOOT_OBJS_EFI = $(BOOTDIR_EFI)/boot.o
-KERNEL_OBJS = $(KERNELDIR)/kernel.o $(KERNELDIR)/init/init.o $(KERNELDIR)/mm/mm.o $(KERNELDIR)/fs/fs.o $(KERNELDIR)/drivers/driver.o $(KERNELDIR)/lib/string.o $(KERNELDIR)/arch/x86/startup.o
+KERNEL_OBJS = $(KERNELDIR)/kernel.o $(KERNELDIR)/init/init.o $(KERNELDIR)/mm/mm.o $(KERNELDIR)/fs/fs.o $(KERNELDIR)/drivers/driver.o $(KERNELDIR)/lib/string.o $(KERNELDIR)/arch/x86/startup.o $(KERNELDIR)/printk.o
 
 # 目标文件：'all' 是默认目标，这里定义了最终生成的ISO映像
 # Target file: 'all' is the default target, which builds the final ISO image
@@ -116,6 +116,11 @@ $(KERNELDIR)/lib/string.o: $(KERNELDIR)/lib/string.c $(INCDIR)/string.h
 # Compile architecture-specific startup code
 $(KERNELDIR)/arch/x86/startup.o: $(KERNELDIR)/arch/x86/startup.S
 	nasm -f elf32 $(KERNELDIR)/arch/x86/startup.S -o $(KERNELDIR)/arch/x86/startup.o
+
+# 编译内核打印模块
+# Compile kernel print module
+$(KERNELDIR)/printk.o: $(KERNELDIR)/printk.c $(INCDIR)/kernel/printk.h
+	gcc $(CFLAGS) -c $(KERNELDIR)/printk.c -o $(KERNELDIR)/printk.o
 
 # 虚假目标：clean，用于清理编译生成的文件
 # Phony target: clean, used to clean up generated files
