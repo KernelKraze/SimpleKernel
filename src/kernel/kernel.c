@@ -12,7 +12,7 @@
  */
 
 #include "kernel/mm.h"  // 包含内存管理头文件
-#include "string.h"     // 包含字符串处理头文件
+#include "printk.h"     // 包含内核打印头文件
 
 #define VIDEO_MEMORY 0xb8000
 #define SCREEN_WIDTH 80
@@ -33,20 +33,19 @@ void kernel_main(void)
         vidptr[i + 1] = WHITE_ON_BLACK;
     }
     cursor_pos = 0;
-    printf("Hello, World!\n");
 
     // 打印内核初始化信息
-    printf("[Kernel INFO] %s\n", "Kernel started\n");
-    printf("[Kernel INFO] %s\n", "Memory Management Initialized\n");
+    printk(LOG_LEVEL_INFO, "Kernel started\n");
+    printk(LOG_LEVEL_INFO, "Memory Management Initialized\n");
 
     // 测试内存分配和释放
     void* test_alloc = kmalloc(256); // 分配256字节内存
     if (test_alloc) {
-        printf("[Kernel INFO] %s\n", "Memory Allocated: 256 bytes\n");
+        printk(LOG_LEVEL_INFO, "Memory Allocated: 256 bytes\n");
         kfree(test_alloc); // 释放分配的内存
-        printf("[Kernel INFO] %s\n", "Memory Freed: 256 bytes\n");
+        printk(LOG_LEVEL_INFO, "Memory Freed: 256 bytes\n");
     } else {
-        printf("[Kernel ERROR] %s\n", "Memory Allocation Failed\n");
+        printk(LOG_LEVEL_ERROR, "Memory Allocation Failed\n");
     }
 
     // 无限循环，防止内核退出
