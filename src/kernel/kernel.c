@@ -12,7 +12,7 @@
  */
 
 #include "kernel/mm.h"  // 包含内存管理头文件
-#include "printk.h"     // 包含内核打印头文件
+#include "kernel/printk.h"     // 包含内核打印头文件
 
 #define VIDEO_MEMORY 0xb8000
 #define SCREEN_WIDTH 80
