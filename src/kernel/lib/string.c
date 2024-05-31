@@ -5,13 +5,6 @@
 #include "string.h"
 #include <stdarg.h>
 
-#define VIDEO_MEMORY 0xb8000
-#define SCREEN_WIDTH 80
-#define SCREEN_HEIGHT 25
-#define WHITE_ON_BLACK 0x07
-
-static unsigned int cursor_pos = 0;
-
 // String functions
 // Implement string manipulation routines here
 // 字符串函数
@@ -136,40 +129,10 @@ int vsnprintf(char *str, size_t size, const char *format, va_list ap) {
     return len;
 }
 
-// Print a formatted string to the video memory
-// 打印格式化字符串到视频内存
-void vprintf(const char *format, va_list args) {
-    char buffer[1024];
-    vsnprintf(buffer, sizeof(buffer), format, args);
-
-    char *vidptr = (char *)VIDEO_MEMORY;
-
-    for (char *p = buffer; *p != '\0'; p++) {
-        if (*p == '\n') {
-            // Move to the beginning of the next line
-            // 移动到下一行的开头位置
-            cursor_pos = ((cursor_pos / (SCREEN_WIDTH * 2)) + 1) * SCREEN_WIDTH * 2;
-            continue;
-        }
-
-        vidptr[cursor_pos] = *p;
-        vidptr[cursor_pos + 1] = WHITE_ON_BLACK;
-        cursor_pos += 2;
-
-        // Move to the next line if end of screen width is reached
-        // 如果到达屏幕宽度的末尾，则移动到下一行
-        if (cursor_pos >= SCREEN_WIDTH * 2 * SCREEN_HEIGHT) {
-            cursor_pos = 0;
-        }
-    }
-}
-
-
-// Print a formatted string
-// 打印格式化字符串
-void printf(const char *format, ...) {
-    va_list args;
-    va_start(args, format);
-    vprintf(format, args);
-    va_end(args);
+int snprintf(char *str, size_t size, const char *format, ...) {
+    va_list ap;
+    va_start(ap, format);
+    int result = vsnprintf(str, size, format, ap);
+    va_end(ap);
+    return result;
 }
