@@ -24,12 +24,8 @@ size_t strlen(const char *str);
 // 格式化字符串并将其放入缓冲区
 int vsnprintf(char *str, size_t size, const char *format, va_list ap);
 
-// Function to print a formatted string to the video memory
-// 打印格式化字符串到视频内存
-void vprintf(const char *format, va_list args);
-
-// Function to print a formatted string
-// 打印格式化字符串
-void printf(const char *format, ...);
+// Function to format a string and place it in a buffer
+// 格式化字符串并将其放入缓冲区
+int snprintf(char *str, size_t size, const char *format, ...);
 
 #endif // STRING_H
