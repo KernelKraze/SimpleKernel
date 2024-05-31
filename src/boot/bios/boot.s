@@ -17,12 +17,12 @@ _start:
     call enable_a20
 
     ; Initialize protected mode
-    cli
-    lgdt [gdt_descriptor]
+    cli                             ; Disable interrupts / 禁用中断
+    lgdt [gdt_descriptor]           ; Load GDT / 加载GDT
     mov eax, cr0
-    or eax, 1
+    or eax, 1                       ; Set PE bit (Protection Enable) / 设置PE位（启用保护）
     mov cr0, eax
-    jmp CODE_SEG:init_pm32
+    jmp CODE_SEG:init_pm32          ; Far jump to flush prefetch queue / 远跳转以刷新指令预取队列
 
 enable_a20:
     in al, 0x64
@@ -44,19 +44,19 @@ init_pm32:
     mov fs, ax
     mov gs, ax
     mov ss, ax
-    mov esp, STACK_TOP
+    mov esp, STACK_TOP             ; Set stack pointer / 设置堆栈指针
 
-    call kernel_main
-    hlt
+    call kernel_main               ; Call kernel_main / 调用 kernel_main
+    hlt                            ; Halt the CPU / 停止CPU
 
 section .note.GNU-stack
     dd 0, 0, 0
 
 section .gdt
 gdt_start:
-    dq 0x0000000000000000         ; Null segment
-    dq 0x00cf9a000000ffff         ; Code segment descriptor
-    dq 0x00cf92000000ffff         ; Data segment descriptor
+    dq 0x0000000000000000         ; Null segment / 空段
+    dq 0x00cf9a000000ffff         ; Code segment descriptor / 代码段描述符
+    dq 0x00cf92000000ffff         ; Data segment descriptor / 数据段描述符
 gdt_end:
 
 gdt_descriptor:
