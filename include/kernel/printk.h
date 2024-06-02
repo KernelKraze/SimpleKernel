@@ -9,6 +9,7 @@
 
 // Log levels / 日志级别
 #define LOG_LEVEL_INFO  "INFO"
+#define LOG_LEVEL_TEST  "TEST"
 #define LOG_LEVEL_ERROR "ERROR"
 
 // Kernel print function / 声明打印函数

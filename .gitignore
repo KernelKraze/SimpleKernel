@@ -34,6 +34,7 @@
 *.bin
 *.iso
 *.efi
+*.EFI
 
 # Debug files
 *.dSYM/
@@ -91,3 +92,9 @@ Thumbs.db
 /.vs/
 /.idea/
 /*.sublime-workspace
+
+
+
+
+
+fat.img

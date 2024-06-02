@@ -1,4 +1,4 @@
-; SPDX-License-Identifier: MIT
+; SPDX-Identifier: MIT
 ; This code sets up the Multiboot header and starts the kernel.
 ; 该代码设置了Multiboot头并启动内核。
 
